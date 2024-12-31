@@ -15,20 +15,20 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO commentDTO) {
         return ResponseEntity.ok(commentService.createComment(commentDTO));
     }
 
     @PostMapping("/upvote/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<CommentDTO> upvoteComment(@PathVariable Integer id) {
         return ResponseEntity.ok(commentService.upvoteComment(id));
     }
 
     @PostMapping("/downvote/{id}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<CommentDTO> downvoteComment(@PathVariable Integer id) {
         return ResponseEntity.ok(commentService.downvoteComment(id));
     }
-} 
+}
