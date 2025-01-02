@@ -1,31 +1,41 @@
 package com.mobile.torism.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mobile.torism.dto.PlaceDTO;
+import com.mobile.torism.entities.Image;
+import com.mobile.torism.mappers.PlaceMapper;
+import com.mobile.torism.services.ImageService;
 import com.mobile.torism.services.PlaceService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/places")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@AllArgsConstructor
 public class PlaceController {
     private final PlaceService placeService;
+    private final ObjectMapper objectMapper;
+    private final ImageService imageService;
+    private final PlaceMapper placeMapper;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<PlaceDTO> createPlace(@Valid @RequestBody PlaceDTO placeDTO) {
+    public ResponseEntity<PlaceDTO> createPlace(
+            @RequestParam("place") String placeData,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) {
         try {
-            PlaceDTO createdPlace = placeService.createPlace(placeDTO);
-            return new ResponseEntity<>(createdPlace, HttpStatus.CREATED);
+            PlaceDTO placeDTO = objectMapper.readValue(placeData, PlaceDTO.class);
+            PlaceDTO createdPlace = placeService.createPlace(placeDTO, imageFile);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdPlace);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
@@ -33,12 +43,15 @@ public class PlaceController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PlaceDTO> updatePlace(
             @PathVariable Integer id,
-            @Valid @RequestBody PlaceDTO placeDTO) {
+            @RequestParam("place") String placeData,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile) {
         try {
-            PlaceDTO updatedPlace = placeService.updatePlace(id, placeDTO);
+            PlaceDTO placeDTO = objectMapper.readValue(placeData, PlaceDTO.class);
+            PlaceDTO updatedPlace = placeService.updatePlace(id, placeDTO, imageFile);
             return ResponseEntity.ok(updatedPlace);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
         }
     }
 
@@ -47,9 +60,10 @@ public class PlaceController {
     public ResponseEntity<Void> deletePlace(@PathVariable Integer id) {
         try {
             placeService.deletePlace(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .build();
         }
     }
 
@@ -59,7 +73,8 @@ public class PlaceController {
             PlaceDTO place = placeService.getPlace(id);
             return ResponseEntity.ok(place);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
         }
     }
 
@@ -68,11 +83,12 @@ public class PlaceController {
         try {
             List<PlaceDTO> places = placeService.getAllPlaces();
             if (places.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return ResponseEntity.noContent().build();
             }
             return ResponseEntity.ok(places);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
 
@@ -81,11 +97,12 @@ public class PlaceController {
         try {
             List<PlaceDTO> places = placeService.searchPlaces(name);
             if (places.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                return ResponseEntity.noContent().build();
             }
             return ResponseEntity.ok(places);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
     }
-} 
+}
