@@ -18,4 +18,6 @@ public interface UsersRepo extends JpaRepository<OurUsers, Integer> {
     @Query("update OurUsers o set  o.password = ?2 where o.email = ?1 ")
     void updatePassword(String email, String password);
 
+    OurUsers findOurUsersByEmail(String email);
+
 }

@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,7 +27,8 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     public CommentDTO createComment(CommentDTO commentDTO) {
-        OurUsers user = usersRepo.findById(commentDTO.getUserId())
+        System.out.println("Creating comment");
+        OurUsers user = usersRepo.findByEmail(commentDTO.getEmail())
             .orElseThrow(() -> new EntityNotFoundException("User not found"));
         
         Place place = placeRepository.findById(commentDTO.getPlaceId())
@@ -54,5 +58,10 @@ public class CommentService {
         comment.setDownvotes(comment.getDownvotes() + 1);
         Comment updatedComment = commentRepository.save(comment);
         return commentMapper.toDTO(updatedComment);
+    }
+    public List<CommentDTO> getAllComments(Integer placeId) {
+        List<Comment> comments = commentRepository.findByPlaceId(placeId);
+        return comments.stream().map(commentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 } 

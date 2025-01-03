@@ -11,11 +11,11 @@ import java.util.List;
 public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.email", target = "email")
     @Mapping(source = "place.id", target = "placeId")
     CommentDTO toDTO(Comment comment);
 
-    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "email", target = "user.email")
     @Mapping(source = "placeId", target = "place.id")
     Comment toEntity(CommentDTO commentDTO);
 

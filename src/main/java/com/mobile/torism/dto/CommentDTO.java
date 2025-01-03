@@ -14,6 +14,6 @@ public class CommentDTO {
     private String text;
     private int upvotes;
     private int downvotes;
-    private Integer userId;
+    private String email;
     private Integer placeId;
 } 
