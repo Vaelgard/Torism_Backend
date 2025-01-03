@@ -1,12 +1,9 @@
 package com.mobile.torism.dto;
 
-import com.mobile.torism.entities.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -17,5 +14,5 @@ public class PlaceDTO {
     private String name;
     private String description;
     private String location;
-    private Image image;
+    private String image;
 }

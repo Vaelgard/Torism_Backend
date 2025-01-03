@@ -32,6 +32,9 @@ public class PlaceController {
         try {
             PlaceDTO placeDTO = objectMapper.readValue(placeData, PlaceDTO.class);
             PlaceDTO createdPlace = placeService.createPlace(placeDTO, imageFile);
+
+            System.out.println("Place created: " + createdPlace.getImage());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPlace);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
