@@ -22,20 +22,13 @@ public class OurUsers implements UserDetails {
     private Integer id;
 
     @Column(unique = true)
-    private String cin;
-
-    @Column(unique = true)
     private String email;
 
     private String name;
 
     private String password;
 
-    private String city;
-
     private String role;
-
-    private double solde;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

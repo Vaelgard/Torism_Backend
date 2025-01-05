@@ -25,7 +25,6 @@ public class ReqRes {
     private String role;
     private String email;
     private String password;
-    private double solde;
     private OurUsers ourUsers;
     private List<OurUsers> ourUsersList;
 
@@ -133,13 +132,6 @@ public class ReqRes {
         this.role = role;
     }
 
-    public double getSolde() {
-        return solde;
-    }
-
-    public void setSolde(double solde) {
-        this.solde = solde;
-    }
 
     public int getStatusCode() {
         return statusCode;

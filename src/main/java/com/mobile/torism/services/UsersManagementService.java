@@ -34,12 +34,10 @@ public class UsersManagementService {
             // Create a new user object from the registration request
             OurUsers ourUser = new OurUsers();
             // Set user details from the registration request
-            ourUser.setCin(registrationRequest.getCin());
             ourUser.setEmail(registrationRequest.getEmail());
-            ourUser.setCity(registrationRequest.getCity());
             ourUser.setRole(registrationRequest.getRole());
             ourUser.setName(registrationRequest.getName());
-            ourUser.setSolde(registrationRequest.getSolde());
+            ourUser.setRole("ROLE_USER");
             // Encrypt the user's password before storing it
             ourUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
@@ -207,7 +205,6 @@ public class UsersManagementService {
                 OurUsers existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
                 existingUser.setName(updatedUser.getName());
-                existingUser.setCity(updatedUser.getCity());
                 existingUser.setRole(updatedUser.getRole());
 
                 // Check if password is present in the request

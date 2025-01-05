@@ -20,10 +20,6 @@ public class Comment {
 
     private String text;
 
-    private int upvotes;
-
-    private int downvotes;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("comments")

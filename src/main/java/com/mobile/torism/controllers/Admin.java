@@ -22,6 +22,7 @@ public class Admin {
 
     @PostMapping("/auth/login")
     public ResponseEntity<ReqRes> login(@RequestBody ReqRes req){
+        System.out.println("login");
         return ResponseEntity.ok(usersManagementService.login(req));
     }
 

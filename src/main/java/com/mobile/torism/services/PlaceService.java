@@ -95,4 +95,16 @@ public class PlaceService {
         List<Place> places = placeRepository.findByNameContainingIgnoreCase(name);
         return placeMapper.toDTOList(places);
     }
+    public PlaceDTO upvote(Integer id) {
+        Place place=placeRepository.findPlaceById(id);
+        place.setUpvotes(place.getUpvotes()+1);
+        place.setVoted(true);
+        return placeMapper.toDTO(place);
+    }
+    public PlaceDTO downvote(Integer id) {
+        Place place=placeRepository.findPlaceById(id);
+        place.setDownvotes(place.getDownvotes()-1);
+        place.setVoted(true);
+        return placeMapper.toDTO(place);
+    }
 }

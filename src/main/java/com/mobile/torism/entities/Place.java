@@ -24,6 +24,13 @@ public class Place {
     private String description;
 
     private String location;
+
+    private boolean voted;
+
+    private int upvotes;
+
+    private int downvotes;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)

@@ -25,16 +25,4 @@ public class CommentController {
         System.out.println("hi");
         return ResponseEntity.ok(commentService.getAllComments(id));
     }
-
-    @PostMapping("/upvote/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-    public ResponseEntity<CommentDTO> upvoteComment(@PathVariable Integer id) {
-        return ResponseEntity.ok(commentService.upvoteComment(id));
-    }
-
-    @PostMapping("/downvote/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-    public ResponseEntity<CommentDTO> downvoteComment(@PathVariable Integer id) {
-        return ResponseEntity.ok(commentService.downvoteComment(id));
-    }
 }

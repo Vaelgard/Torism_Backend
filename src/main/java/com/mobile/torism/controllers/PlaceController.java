@@ -108,4 +108,12 @@ public class PlaceController {
                     .body(null);
         }
     }
+    @GetMapping("/upvote/{id}")
+    public ResponseEntity<PlaceDTO> upvotePlaces(@RequestParam Integer id) {
+         return ResponseEntity.ok(placeService.upvote(id));
+    }
+    @GetMapping("downvote/{id}")
+    public ResponseEntity<PlaceDTO> downvotePlaces(@RequestParam Integer id) {
+        return ResponseEntity.ok(placeService.downvote(id));
+    }
 }

@@ -41,24 +41,6 @@ public class CommentService {
         Comment savedComment = commentRepository.save(comment);
         return commentMapper.toDTO(savedComment);
     }
-
-    public CommentDTO upvoteComment(Integer id) {
-        Comment comment = commentRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-        
-        comment.setUpvotes(comment.getUpvotes() + 1);
-        Comment updatedComment = commentRepository.save(comment);
-        return commentMapper.toDTO(updatedComment);
-    }
-
-    public CommentDTO downvoteComment(Integer id) {
-        Comment comment = commentRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
-        
-        comment.setDownvotes(comment.getDownvotes() + 1);
-        Comment updatedComment = commentRepository.save(comment);
-        return commentMapper.toDTO(updatedComment);
-    }
     public List<CommentDTO> getAllComments(Integer placeId) {
         List<Comment> comments = commentRepository.findByPlaceId(placeId);
         return comments.stream().map(commentMapper::toDTO)
