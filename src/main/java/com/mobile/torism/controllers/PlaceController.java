@@ -22,9 +22,6 @@ import java.util.List;
 public class PlaceController {
     private final PlaceService placeService;
     private final ObjectMapper objectMapper;
-    private final ImageService imageService;
-    private final PlaceMapper placeMapper;
-
     @PostMapping
     public ResponseEntity<PlaceDTO> createPlace(
             @RequestParam("place") String placeData,
@@ -115,5 +112,25 @@ public class PlaceController {
     @GetMapping("downvote/{id}")
     public ResponseEntity<PlaceDTO> downvotePlaces(@RequestParam Integer id) {
         return ResponseEntity.ok(placeService.downvote(id));
+    }
+    @PostMapping("/favorite")
+    public ResponseEntity<String> favoritePlace(
+            @RequestParam Integer placeId,
+            @RequestParam String userEmail) {
+        try {
+            placeService.createFavPlace(placeId, userEmail);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @GetMapping("/favorite/{userEmail}")
+    public ResponseEntity<List<PlaceDTO>> favoritePlaces(@PathVariable String userEmail) {
+        List<PlaceDTO> list=placeService.getAllFavPlaces(userEmail);
+        if (list.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.ok(list);
+        }
     }
 }

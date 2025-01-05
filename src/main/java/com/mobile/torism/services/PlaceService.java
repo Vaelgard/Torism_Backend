@@ -1,10 +1,14 @@
 package com.mobile.torism.services;
 
 import com.mobile.torism.dto.PlaceDTO;
+import com.mobile.torism.entities.Favorites;
 import com.mobile.torism.entities.Image;
+import com.mobile.torism.entities.OurUsers;
 import com.mobile.torism.entities.Place;
 import com.mobile.torism.mappers.PlaceMapper;
+import com.mobile.torism.repositories.FavoritesRepository;
 import com.mobile.torism.repositories.PlaceRepository;
+import com.mobile.torism.repositories.UsersRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,8 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceMapper placeMapper;
     private final CloudinaryService cloudinaryService;
+    private final FavoritesRepository favoritesRepository;
+    private final UsersRepo usersRepo;
 
     public PlaceDTO createPlace(PlaceDTO placeDTO, MultipartFile imageFile) throws IOException {
         Place place = placeMapper.toEntity(placeDTO);
@@ -107,4 +113,24 @@ public class PlaceService {
         place.setVoted(true);
         return placeMapper.toDTO(place);
     }
+    public void createFavPlace(Integer placeId, String userEmail) throws IOException {
+        Place place = placeRepository.findPlaceById(placeId);
+        OurUsers user=usersRepo.findOurUsersByEmail(userEmail);
+        Favorites favorites= new Favorites(null,user,place);
+        favoritesRepository.save(favorites);
+    }
+    public List<PlaceDTO> getAllFavPlaces(String userEmail) {
+        // Find the user by email
+        OurUsers user = usersRepo.findOurUsersByEmail(userEmail);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with email: " + userEmail);
+        }
+        List<Favorites> favorites = favoritesRepository.findFavoritesByUser(user);
+        List<Place> favoritePlaces = favorites.stream()
+                .map(Favorites::getPlace)
+                .toList();
+        return placeMapper.toDTOList(favoritePlaces);
+    }
+
+
 }
