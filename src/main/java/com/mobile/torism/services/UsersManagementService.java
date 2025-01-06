@@ -1,7 +1,9 @@
 package com.mobile.torism.services;
 
 import com.mobile.torism.dto.ReqRes;
+import com.mobile.torism.dto.UserDTO;
 import com.mobile.torism.entities.OurUsers;
+import com.mobile.torism.mappers.UserMapper;
 import com.mobile.torism.repositories.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,8 @@ public class UsersManagementService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserMapper userMapper;
 
 
     public ReqRes register(ReqRes registrationRequest){
@@ -205,7 +209,7 @@ public class UsersManagementService {
                 OurUsers existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
                 existingUser.setName(updatedUser.getName());
-                existingUser.setRole(updatedUser.getRole());
+                existingUser.setRole(existingUser.getRole());
 
                 // Check if password is present in the request
                 if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
@@ -250,4 +254,19 @@ public class UsersManagementService {
         return reqRes;
     }
 
+    public UserDTO getUsersByEmail(String userEmail) {
+        System.out.println("here000" + userEmail);
+        UserDTO userDTO;
+        try {
+            Optional<OurUsers> userOptional = usersRepo.findByEmail(userEmail);
+            if (userOptional.isPresent()) {
+                OurUsers user = userOptional.get();
+                userDTO = userMapper.userToUserDTO(user);
+                return userDTO;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
 }

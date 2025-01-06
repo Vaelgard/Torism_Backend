@@ -20,29 +20,12 @@ public class ReqRes {
     private String refreshToken;
     private String expirationTime;
     private String name;
-    private String city;
-    private String cin;
     private String role;
     private String email;
     private String password;
     private OurUsers ourUsers;
     private List<OurUsers> ourUsersList;
 
-    public String getCin() {
-        return cin;
-    }
-
-    public void setCin(String cin) {
-        this.cin = cin;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
 
     public String getEmail() {
         return email;

@@ -34,7 +34,6 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/*", "/public/*", "/forgotPassword/**").permitAll()
-                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN","CONDUCTEUR")
                         .requestMatchers("/driver/**").hasAnyAuthority("CONDUCTEUR", "ADMIN")
                         .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN")
